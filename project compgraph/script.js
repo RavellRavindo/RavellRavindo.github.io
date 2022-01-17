@@ -3,7 +3,7 @@ import * as THREE from './three.js-master/build/three.module.js';
 let camera, scene, renderer; 
 let lastTime;
 let stack;
-let temp;
+let auto;
 let gameOver;
 const cubeHeight = 2; 
 const cubeSize = 2;
@@ -13,7 +13,7 @@ const startBtnElement = document.getElementById("startBtn");
 const gameOverElement = document.getElementById("gameOver");
 
 function init() {
-    temp = true;
+    auto = true;
     gameOver = false;
     lastTime = 0;
     stack = [];
@@ -73,7 +73,7 @@ function init() {
 
 // START GAME function
 function startGame() {
-    temp = false;
+    auto = false;
     gameOver = false;
     lastTime = 0;
     stack = [];
@@ -151,7 +151,7 @@ window.addEventListener("keydown", function(event) {
 
 // EVENTHANDLER function
 function eventHandler() {
-    if (temp) startGame();
+    if (auto) startGame();
     else overlap();
   }
   
@@ -177,7 +177,7 @@ function overlap() {
       addLayer(directionX, directionZ, cubeSize, cubeSize, nextDirection);
     } else {
       gameOver = true;
-      if (gameOverElement && !temp) gameOverElement.style.display = "flex";
+      if (gameOverElement && !auto) gameOverElement.style.display = "flex";
     }
   }
 
@@ -190,17 +190,17 @@ function animation(time) {
         const topLayer = stack[stack.length - 1];
         const previousLayer = stack[stack.length - 2];
 
-        const cubeMove = !gameOver && (!temp || (temp && topLayer.threejs.position[topLayer.direction] < previousLayer.threejs.position[topLayer.direction]));
+        const cubeMove = !gameOver && (!auto || (auto && topLayer.threejs.position[topLayer.direction] < previousLayer.threejs.position[topLayer.direction]));
                 
         if (cubeMove) {
     
             topLayer.threejs.position[topLayer.direction] += speed * timePassed;
             if (topLayer.threejs.position[topLayer.direction] > 10) {
                 gameOver = true;
-                if (gameOverElement && !temp) gameOverElement.style.display = "flex";
+                if (gameOverElement && !auto) gameOverElement.style.display = "flex";
             }
         } else {
-            if (temp) {
+            if (auto) {
                 overlap();
               }
         }
